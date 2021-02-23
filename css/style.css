@@ -1,0 +1,110 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:hover {
+  color: lightgray;
+}
+
+a:visited:hover {
+  color: gray;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: "Balsamiq Sans", cursive;
+  background-color: black;
+  color: white;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+body header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+  padding: 0 40px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+}
+body header #logo {
+  flex-grow: 1;
+}
+body header #logo img {
+  object-fit: contain;
+  height: 60px;
+}
+body header nav button {
+  color: white;
+  border: none;
+  background: none;
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-left: 40px;
+  padding: 5px;
+  letter-spacing: 5px;
+}
+body header nav button:hover {
+  color: lightgray;
+  cursor: pointer;
+}
+body section {
+  padding-top: 100px;
+}
+body section h2 {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: center;
+  height: 5000px;
+}
+body #content #list {
+  margin: 0 10%;
+}
+body #content #list .list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body #content #list .list-item .checkbox-container, body #content #list .list-item .actions-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+body #content #list .list-item .checkbox-container button, body #content #list .list-item .checkbox-container .is-complete, body #content #list .list-item .actions-container button, body #content #list .list-item .actions-container .is-complete {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  margin: 30px;
+}
+body #content #list .list-item .checkbox-container button, body #content #list .list-item .actions-container button {
+  color: white;
+  background-color: red;
+}
+body #content #list .list-item .checkbox-container .is-expanded, body #content #list .list-item .actions-container .is-expanded {
+  display: none;
+}
+body #content #list .list-item p {
+  font-size: 12px;
+}
+body #content #list .list-item:nth-child(odd) {
+  background-color: rgba(125, 125, 125, 0.5);
+}
+
+/*# sourceMappingURL=style.css.map */

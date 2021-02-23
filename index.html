@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>To-Do</title>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+        <div id="container">
+            <!-- Top Navigation -->
+            <header>
+                <div id="logo">
+                    <img src="src/logo.png" onclick="homeState()" alt="Checkmark">
+                </div>
+
+                <nav>
+                    <button onclick="myListState()">My Lists<button><span></span>
+                    <button>Login<button>
+                </nav>
+            </header>
+
+            <section id="content">
+                <div id="list">
+                    <div class="list-item">
+                        <div class="checkbox-container">
+                            <input type="checkbox" class="is-complete">
+
+                            <div class="text">
+                                <h3>Title</h3>
+
+                                <p>Description</p>
+                            </div>
+                        </div>
+
+                        <div class="actions-container">
+                            <span class="dueDate">DueDate</span>
+
+                            <img src="" alt="">
+                            <input type="checkbox" class="is-expanded">
+
+                            <button onclick="">-</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>

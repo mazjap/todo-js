@@ -1,0 +1,139 @@
+$navHeight: 60px;
+$navSpacing: 40px;
+$textColor: white;
+
+$sectionSpacing: $navHeight + 40px;
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    color: $textColor;
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightgray;
+}
+
+a:visited:hover {
+    color: gray;
+}
+
+// Chrome, Opera, etc.
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    font-family: 'Balsamiq Sans', cursive;
+    background-color: black;
+    color: $textColor;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    header {
+        position: sticky;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: $navHeight;
+        width: 100%;
+        padding: 0 $navSpacing;
+        background-color: rgba(255, 255, 255, .05);  
+        backdrop-filter: blur(5px);
+
+        #logo {
+            flex-grow: 1;
+
+            img {
+                object-fit: contain;
+                height: $navHeight;
+            }
+        }
+
+        nav {
+
+            button {
+                color: $textColor;
+                border: none;
+                background: none;
+                text-transform: uppercase;
+                font-size: 18px;
+                margin-left: $navSpacing;
+                padding: 5px;
+                letter-spacing: 5px;
+            }
+
+            button:hover {
+                color: lightgray;
+                cursor: pointer;
+            }
+        }
+    }
+
+    section {
+        padding-top: $sectionSpacing;
+        
+        h2 {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+
+            text-align: center;
+
+            height: 5000px;
+        }
+    }
+
+    #content {
+        #list {
+            margin: 0 10%;
+
+            .list-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .checkbox-container, .actions-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    button, .is-complete {
+                        width: 16px;
+                        height: 16px;
+                        border: none;
+                        border-radius: 2px;
+                        cursor: pointer;
+                        margin: 30px;
+                    }
+
+                    button {
+                        color: white;
+                        background-color: red;
+                    }
+
+                    .is-expanded {
+                        display: none;
+                    }
+                }
+
+                h3 {
+
+                }
+
+                p {
+                    font-size: 12px;
+                }
+            }
+
+            .list-item:nth-child(odd) {
+                background-color: rgba(125,125,125,0.5);
+            }
+        }
+    }
+}
