@@ -1,8 +1,5 @@
-
-// Classes
-
 class Task {
-    constructor(title, dueDate, description = "No description", isCompleted = false, id = generateID()) {
+    constructor(title, dueDate, description = "No description", isCompleted = false, id = generateUUID()) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -27,16 +24,16 @@ class Task {
     }
 
     formattedDate() {
-        return this.dueDate.getFullYear() + "/" + 
-               this.dueDate.getMonth() + "/" + 
-               this.dueDate.getDate() + " " + 
-               this.dueDate.getHours() + ":"  + 
+        return this.dueDate.getFullYear() + "/" +
+               this.dueDate.getMonth() + "/" +
+               this.dueDate.getDate() + " " +
+               this.dueDate.getHours() + ":"  +
                this.dueDate.getMinutes();  // Output: `2021/02/23 9:49`
     }
 }
 
 class List {
-    constructor(name, tasks, id = generateID()) {
+    constructor(name, tasks, id = generateUUID()) {
         this.name = name
         this.tasks = tasks;
         this.id = id;
@@ -64,9 +61,10 @@ class List {
 }
 
 class User {
-    constructor(lists = [], id = generateID()) {
+    constructor(username, password, lists = []) {
         this.lists = lists
-        this.id = id
+        this.username = username
+        this.id = hash(username, password)
     }
 
     removeList(id) {
@@ -85,7 +83,7 @@ class User {
 class HTMLGenerator {
     static generateListItem(item) {
         return `
-        <div class="list-item">
+        <div id="list-item">
             <div class="checkbox-container">
                 <input type="checkbox" class="is-complete">
                 <div class="text">
@@ -104,66 +102,63 @@ class HTMLGenerator {
 
     static generateList(list) {
         let str = '<div id="list">'
-        for (item of list) {
-            str += generateListItem(item)
+        for (let item of list.tasks) {
+            str += this.generateListItem(item)
         }
 
         return str + "</div>"
     }
-}
 
-// Global variables
+    static generateListPreview(list) {
+        return `
+        <div class="list-preview">
+            <h3 class="text">${list.name}</h3>
 
-let localStorage = window.localStorage;
-
-let lists = fetchLists();
-
-// Functions
-
-function generateID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
-function fetchLists() {
-    let obj = {};
-    const keys = localStorage.getItem("list_keys") ?? [];
-
-    for (key of keys) {
-        const data = localStorage.getItem(key);
-        if (data) {
-            obj[key] = data;
-        }
+            <div class="count">
+                <p>Count:</p>
+                <p class="todo-count">${list.tasks.length}</p>
+            </div>
+        </div>`;
     }
 
-    return obj;
+    static generateMyLists(lists) {
+        let html = "";
+
+        for (let list of lists) {
+            html += this.generateListPreview(list);
+        }
+
+        return html
+    }
+
+    static generateHome() {
+        return `
+        <div id="home">
+            <h2>Welcome to Todo</h2>
+            <p>click a tab to continue</p>
+        </div>`;
+    }
+
+    static generateLogin() {
+        return `
+        <div id="login">
+            <h2>Login</h2>
+            <div id="username">
+                <p>Username:</p>
+                <input type="text" placeholder="username" id="username-input">
+            </div>
+            <div class="password">
+                <p>Password:</p>
+                <input type="text" placeholder="password" id="password-input">
+            </div>
+            <button id="submit-login" onclick="login()">Login</button>
+        </div>`;
+    }
 }
 
-function save(list, key) {
-    localStorage.setItem("list_keys", obj.keys);
-    localStorage.setItem(key, list);
-}
-
-function changeState(state) {
-    state = state;
-    refreshContent();
-}
-
-function myListState() {
-    let content = document.getElementById("content");
-    
-    content.innerHTML = "<h2>Lists</h2>";
-}
-
-function listState(list) {
-    let content = document.getElementById("content");
-
-    content.innerHTML = generateList(list);
-}
-
-function homeState() {
-    let content = document.getElementById("content");
-    content.innerHTML = "<h2>ACCOMPLISH EVERY GOAL</h2>";
-}
+const State = Object.freeze({
+    "home" : 1,
+    "myLists" : 2,
+    "listDetail" : 3,
+    "login" : 4,
+});

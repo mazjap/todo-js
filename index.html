@@ -18,37 +18,21 @@
                 </div>
 
                 <nav>
-                    <button onclick="myListState()">My Lists<button><span></span>
-                    <button>Login<button>
+                    <div id="drop-down-container">
+                        <button onclick="myListState()" onmouseover="toggleDropDown(true)" onmouseout="toggleDropDown(false)">My Lists</button><span id="drop-down"></span>
+                        <ul id="drop-down">
+                        </ul>
+                    </div>
+                    <button onclick="loginState()">Login</button>
                 </nav>
             </header>
 
             <section id="content">
-                <div id="list">
-                    <div class="list-item">
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="is-complete">
-
-                            <div class="text">
-                                <h3>Title</h3>
-
-                                <p>Description</p>
-                            </div>
-                        </div>
-
-                        <div class="actions-container">
-                            <span class="dueDate">DueDate</span>
-
-                            <img src="" alt="">
-                            <input type="checkbox" class="is-expanded">
-
-                            <button onclick="">-</button>
-                        </div>
-                    </div>
-                </div>
             </section>
         </div>
-
-        <script src="script.js"></script>
+        <!-- Hashing algo -->
+        <script src="https://asecuritysite.com/sha512.js"></script>
+        <script src="/js/classes.js"></script>
+        <script src="/js/script.js"></script>
     </body>
 </html>

@@ -30,12 +30,16 @@ body {
   scrollbar-width: none;
   /* Firefox */
 }
+body #logo img {
+  cursor: pointer;
+}
 body header {
-  position: sticky;
-  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: row;
+  position: sticky;
+  top: 0;
   height: 60px;
   width: 100%;
   padding: 0 40px;
@@ -66,12 +70,6 @@ body header nav button:hover {
 body section {
   padding-top: 100px;
 }
-body section h2 {
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  text-align: center;
-  height: 5000px;
-}
 body #content #list {
   margin: 0 10%;
 }
@@ -79,11 +77,13 @@ body #content #list .list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
 }
 body #content #list .list-item .checkbox-container, body #content #list .list-item .actions-container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 }
 body #content #list .list-item .checkbox-container button, body #content #list .list-item .checkbox-container .is-complete, body #content #list .list-item .actions-container button, body #content #list .list-item .actions-container .is-complete {
   width: 16px;
@@ -103,8 +103,36 @@ body #content #list .list-item .checkbox-container .is-expanded, body #content #
 body #content #list .list-item p {
   font-size: 12px;
 }
-body #content #list .list-item:nth-child(odd) {
+body #content .list-item:nth-child(odd), body #content .list-preview:nth-child(odd) {
   background-color: rgba(125, 125, 125, 0.5);
+}
+body #content #list-preview {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+body #content #list-preview .text {
+  flex-grow: 1;
+}
+body #content #list-preview .count p {
+  display: inline;
+}
+body #content #home {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+body #content #home * {
+  padding-bottom: 10px;
+}
+body #content #login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body #content #login div {
+  margin: 10px 0;
 }
 
 /*# sourceMappingURL=style.css.map */
