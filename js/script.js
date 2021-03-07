@@ -31,21 +31,25 @@ function login() {
 
     if (username && password) {
         User.current = new User(username, password)
+        document.getElementById("login-button").innerText = User.current?.username ?? "No Username";
         refreshContent(State.myLists)
     }
 }
 
-function toggleDropDown(bool) {
+function toggleDropDown() {
     const dropDown = document.getElementById("drop-down");
     const icon = document.getElementById("drop-down-icon");
+    const bool = dropDown.offsetHeight === 0;
 
     dropDown.innerHTML = HTMLGenerator.generateDropDown(User.current?.lists ?? []);
 
     if (bool) {
-        dropDown.style.height = "100%";
+        dropDown.style.height = "90vw";
+        dropDown.style.overflow = "visible";
         icon.style.transform = "rotate(90deg)";
     } else {
         dropDown.style.height = "0";
+        dropDown.style.overflow = "hidden";
         icon.style.transform = "";
     }
 }
@@ -62,8 +66,8 @@ function refreshContent(state, listId) {
             break;
         case State.listDetail:
             console.log("Generating single list");
-            if (user) {
-                for (let list of user.lists) {
+            if (User.current) {
+                for (let list of User.current?.lists ?? []) {
                     if (list.id === listId) {
                         html = HTMLGenerator.generateList(list);
                         break;
@@ -89,6 +93,28 @@ function refreshContent(state, listId) {
         displayError(errorMessage);
     } else {
         document.getElementById("content").innerHTML = html;
+    }
+}
+
+function displayModal(state) {
+    document.getElementById("modal-content").innerHTML = HTMLGenerator.generateModal(state);
+    document.getElementById("modal-popover").style.display = "flex";
+}
+
+function abortModal() {
+    document.getElementById("modal-popover").style.display = "none";
+}
+
+function createList() {
+    const name = document.getElementById("new-list-title").value;
+
+    if (User.current && name) {
+        const list = new List(name);
+        User.current.addList(list);
+        User.saveChanges();
+        document.getElementById("drop-down").innerHTML = HTMLGenerator.generateDropDown(User.current?.lists ?? []);
+        abortModal();
+        refreshContent(State.listDetail, list.id);
     }
 }
 

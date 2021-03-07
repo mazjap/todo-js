@@ -1,3 +1,5 @@
+let store = window.localStorage;
+
 class Task {
     constructor(title, dueDate, description = "No description", isCompleted = false, id = generateUUID()) {
         this.title = title;
@@ -28,7 +30,7 @@ class Task {
                this.dueDate.getMonth() + "/" +
                this.dueDate.getDate() + " " +
                this.dueDate.getHours() + ":"  +
-               this.dueDate.getMinutes();  // Output: `2021/02/23 9:49`
+               this.dueDate.getMinutes(); // Output: `2021/02/23 9:49`
     }
 }
 
@@ -62,10 +64,10 @@ class List {
 
 class User {
     constructor(username, password) {
-        this.username = username
-        this.id = hash(username, password)
-        this.store = window.localStorage
-        this.lists = this.fetchLists()
+        this.username = username;
+        this.id = hash(username, password).toString();
+        this.lists = this.fetchLists();
+        console.log("Logged in with hash: " + this.id);
     }
 
     removeList(id) {
@@ -82,13 +84,17 @@ class User {
 
 
     fetchLists() {
-        return JSON.parse(this.store.getItem(this.id) ?? '[]');
+        let val = store.getItem(this.id)
+        console.log("Val: " + val);
+        return JSON.parse(val ?? '[]');
     }
 
     static current = null;
 
     static saveChanges() {
-        current?.store.setItem(this.id, JSON.stringify(this.lists))
+        let stringcheese = JSON.stringify(this.lists);
+        console.log(stringcheese);
+        store.setItem(this.id, stringcheese);
     }
 }
 
@@ -114,7 +120,7 @@ class HTMLGenerator {
 
     static generateList(list) {
         let str = '<div id="list">'
-        for (let item of list.tasks) {
+        for (let item of list?.tasks ?? []) {
             str += this.generateListItem(item)
         }
 
@@ -128,34 +134,48 @@ class HTMLGenerator {
 
             <div class="count">
                 <p>Count:</p>
-                <p class="todo-count">${list.tasks.length}</p>
+                <p class="todo-count">${list?.tasks?.length ?? 0}</p>
             </div>
         </div>`;
     }
 
-    static generateMyLists(user) {
-        let html = "";
+    static generateMyLists() {
+        const user = User.current
 
-        for (let list of user.lists) {
-            html += this.generateListPreview(list);
+        let html =  user ? `<p id="new-list" onclick="displayModal('new-list')">+</p>` : '';
+
+        if ((user?.lists ?? []).length !== 0) {
+            for (let list of user?.lists ?? []) {
+                html += this.generateListPreview(list);
+            }
+        } else {
+            html += "<p class='error-message'>You do not have any lists</p>";
         }
 
         return html
     }
 
     static generateDropDown(lists) {
-        if (lists && lists.length != 0) {
-            let html = "";
+        let html = "";
+        let addNew = true;
 
+        if (lists && lists.length != 0) {
             for (let list of lists) {
                 html += `
-                <li onclick="listState('${list.id}')">${list.title}</li>`;
+                <span class="highlightable" onclick="listState('${list.id}')">${list.name}</span>`;
             }
         } else if (User.current) {
-            return "<li onclick='myListsState()'>No lists. Click to add a new list</li>";
+            html = "<span class='highlightable' onclick='myListsState()'>No lists. Click below to add a new list</span>";
         } else {
-            return "<li onclick='loginState()'>You must be signed in to view lists</li>";
+            html = "<span class='highlightable' onclick='loginState()'>You must be signed in to view lists</span>";
+            addNew = false;
         }
+
+        if (addNew) {
+            html += `<span class="highlightable" onclick="displayModal('new-list')">New List</span>`;
+        }
+
+        return html;
     }
 
     static generateHome() {
@@ -180,6 +200,17 @@ class HTMLGenerator {
             </div>
             <button id="submit-login" onclick="login()">Login</button>
         </div>`;
+    }
+
+    static generateModal(state) {
+        switch (state) {
+            case "new-list":
+                return `<input id="new-list-title" type="text" placeholder="List Title">'
+                <div id="modal-buttons">
+                    <button onclick="createList()">Create</button>
+                    <button class="destructive" onclick="abortModal()">Cancel</button>
+                </div>`;
+        }
     }
 }
 

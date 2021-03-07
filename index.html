@@ -18,20 +18,22 @@
                 </div>
 
                 <nav>
-                    <div id="drop-down-container" class="nav-item" onmouseover="toggleDropDown(true)" onmouseout="toggleDropDown(false)">
-                        <button onclick="myListsState()">My Lists</button><img id="drop-down-icon" src="src/drop-down.png" alt="right facing arrow">
-                        <ul id="drop-down">
-                            <li onclick="listState('id')">Something here</li>
-                            <li>Something here</li>
-                            
-                        </ul>
+                    <div id="drop-down-container" class="nav-item">
+                        <button onclick="myListsState()">My Lists</button><img onclick="toggleDropDown()" id="drop-down-icon" src="src/drop-down.png" alt="right facing arrow">
+                        <div id="drop-down">                            
+                        </div>
                     </div>
-                    <button class="nav-item" onclick="loginState()">Login</button>
+                    <button id="login-button" class="nav-item" onclick="loginState()">Login</button>
                 </nav>
             </header>
 
             <section id="content">
             </section>
+
+            <div id="modal-popover">
+                <div id="modal-content">
+                </div>
+            </div>
         </div>
         <!-- Hashing algo -->
         <script src="https://asecuritysite.com/sha512.js"></script>
