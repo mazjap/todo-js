@@ -1,7 +1,6 @@
 
 // Application Start
 var localStorage = window.localStorage;
-var user;
 
 refreshContent(State.login);
 
@@ -19,18 +18,8 @@ function generateUUID() {
     });
 }
 
-function fetchLists() {
-    let obj = {};
-    const keys = localStorage.getItem("list_keys") ?? [];
-
-    for (key of keys) {
-        const data = localStorage.getItem(key);
-        if (data) {
-            obj[key] = data;
-        }
-    }
-
-    return obj;
+function displayError(message) {
+    document.getElementById("content").innerHTML += `<p class="error-message">${message}</p>`;
 }
 
 function login() {
@@ -41,32 +30,30 @@ function login() {
     const password = passwordInput.value;
 
     if (username && password) {
-
+        User.current = new User(username, password)
+        refreshContent(State.myLists)
     }
 }
 
 function toggleDropDown(bool) {
     const dropDown = document.getElementById("drop-down");
+    const icon = document.getElementById("drop-down-icon");
+
+    dropDown.innerHTML = HTMLGenerator.generateDropDown(User.current?.lists ?? []);
 
     if (bool) {
-        dropDown.style.display = "inline";
+        dropDown.style.height = "100%";
+        icon.style.transform = "rotate(90deg)";
     } else {
-        dropDown.style.display = "none";
+        dropDown.style.height = "0";
+        icon.style.transform = "";
     }
 }
 
-function save(list, key) {
-    localStorage.setItem("list_keys", obj.keys);
-    localStorage.setItem(key, list);
-}
-
-function fetch(key) {
-    return localStorage.getItem(key)
-}
-
-function refreshContent(state) {
+function refreshContent(state, listId) {
     console.log(state);
     let html = "";
+    let errorMessage = "";
 
     switch (state) {
         case State.home:
@@ -75,11 +62,22 @@ function refreshContent(state) {
             break;
         case State.listDetail:
             console.log("Generating single list");
-            html = HTMLGenerator.generateList(new List("My List", [new Task("Do stuff", Date.now(), "Hehe")]));
+            if (user) {
+                for (let list of user.lists) {
+                    if (list.id === listId) {
+                        html = HTMLGenerator.generateList(list);
+                        break;
+                    }
+                }
+                
+                if (!html) {
+                    errorMessage = "Cannot find list with id: " + listId;
+                }
+            }
             break;
         case State.myLists:
             console.log("Generating my lists");
-            html = HTMLGenerator.generateMyLists([new List("My List", [new Task("Do stuff", Date.now(), "Hehe"), new Task("Do other stuff", Date.now(), "Hehe")])]);
+            html = HTMLGenerator.generateMyLists();
             break;
         case State.login:
             console.log("Generating login");
@@ -87,14 +85,18 @@ function refreshContent(state) {
             break;
     }
 
-    document.getElementById("content").innerHTML = html;
+    if (errorMessage) {
+        displayError(errorMessage);
+    } else {
+        document.getElementById("content").innerHTML = html;
+    }
 }
 
-function myListState() {
+function myListsState() {
     refreshContent(State.myLists);
 }
 
-function listState(list) {
+function listState(id) {
     refreshContent(State.listDetail);
 }
 

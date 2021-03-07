@@ -13,17 +13,20 @@
         <div id="container">
             <!-- Top Navigation -->
             <header>
-                <div id="logo">
+                <div id="logo" class="nav-item">
                     <img src="src/logo.png" onclick="homeState()" alt="Checkmark">
                 </div>
 
                 <nav>
-                    <div id="drop-down-container">
-                        <button onclick="myListState()" onmouseover="toggleDropDown(true)" onmouseout="toggleDropDown(false)">My Lists</button><span id="drop-down"></span>
+                    <div id="drop-down-container" class="nav-item" onmouseover="toggleDropDown(true)" onmouseout="toggleDropDown(false)">
+                        <button onclick="myListsState()">My Lists</button><img id="drop-down-icon" src="src/drop-down.png" alt="right facing arrow">
                         <ul id="drop-down">
+                            <li onclick="listState('id')">Something here</li>
+                            <li>Something here</li>
+                            
                         </ul>
                     </div>
-                    <button onclick="loginState()">Login</button>
+                    <button class="nav-item" onclick="loginState()">Login</button>
                 </nav>
             </header>
 

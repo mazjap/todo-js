@@ -61,10 +61,11 @@ class List {
 }
 
 class User {
-    constructor(username, password, lists = []) {
-        this.lists = lists
+    constructor(username, password) {
         this.username = username
         this.id = hash(username, password)
+        this.store = window.localStorage
+        this.lists = this.fetchLists()
     }
 
     removeList(id) {
@@ -77,6 +78,17 @@ class User {
 
     addList(list) {
         this.lists.push(list)
+    }
+
+
+    fetchLists() {
+        return JSON.parse(this.store.getItem(this.id) ?? '[]');
+    }
+
+    static current = null;
+
+    static saveChanges() {
+        current?.store.setItem(this.id, JSON.stringify(this.lists))
     }
 }
 
@@ -121,14 +133,29 @@ class HTMLGenerator {
         </div>`;
     }
 
-    static generateMyLists(lists) {
+    static generateMyLists(user) {
         let html = "";
 
-        for (let list of lists) {
+        for (let list of user.lists) {
             html += this.generateListPreview(list);
         }
 
         return html
+    }
+
+    static generateDropDown(lists) {
+        if (lists && lists.length != 0) {
+            let html = "";
+
+            for (let list of lists) {
+                html += `
+                <li onclick="listState('${list.id}')">${list.title}</li>`;
+            }
+        } else if (User.current) {
+            return "<li onclick='myListsState()'>No lists. Click to add a new list</li>";
+        } else {
+            return "<li onclick='loginState()'>You must be signed in to view lists</li>";
+        }
     }
 
     static generateHome() {

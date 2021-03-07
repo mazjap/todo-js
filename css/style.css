@@ -21,6 +21,15 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.error-message {
+  color: red;
+}
+
+.nav-item {
+  width: 10%;
+  display: inline-block;
+}
+
 body {
   font-family: "Balsamiq Sans", cursive;
   background-color: black;
@@ -38,13 +47,13 @@ body header {
   justify-content: center;
   align-items: center;
   flex-direction: row;
+  background-color: rgba(100, 130, 160, 0.5);
+  backdrop-filter: blur(5px);
   position: sticky;
   top: 0;
   height: 60px;
   width: 100%;
   padding: 0 40px;
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(5px);
 }
 body header #logo {
   flex-grow: 1;
@@ -54,7 +63,8 @@ body header #logo img {
   height: 60px;
 }
 body header nav button {
-  color: white;
+  color: black;
+  transition: color 0.3s;
   border: none;
   background: none;
   text-transform: uppercase;
@@ -62,6 +72,35 @@ body header nav button {
   margin-left: 40px;
   padding: 5px;
   letter-spacing: 5px;
+}
+body header nav #drop-down-container {
+  display: inline;
+}
+body header nav #drop-down-container #drop-down {
+  background-color: rgba(100, 130, 160, 0.5);
+  backdrop-filter: blur(5px);
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  transition: height 0.3s;
+  list-style: none;
+  height: 0;
+  overflow: hidden;
+}
+body header nav #drop-down-container #drop-down li {
+  width: 100%;
+  cursor: pointer;
+  padding: 10px;
+}
+body header nav #drop-down-container #drop-down li:hover {
+  background-color: rgba(125, 125, 125, 0.8);
+}
+body header nav #drop-down-container #drop-down-icon {
+  object-fit: cover;
+  transition: transform 0.3s;
+  height: 10px;
 }
 body header nav button:hover {
   color: lightgray;
@@ -130,6 +169,7 @@ body #content #login {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 5000px;
 }
 body #content #login div {
   margin: 10px 0;

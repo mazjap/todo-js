@@ -1,12 +1,19 @@
 $navHeight: 60px;
 $navSpacing: 40px;
+$navTextColor: black;
 $textColor: white;
+$navItemWidth: 10%;
 
 @mixin flex($justify: center, $align: center, $direction: row) {
     display: flex;
     justify-content: $justify;
     align-items: $align;
     flex-direction: $direction;
+}
+
+@mixin frost() {
+    background-color: rgba(100, 130, 160, .5);
+    backdrop-filter: blur(5px);
 }
 
 $sectionSpacing: $navHeight + 40px;
@@ -35,6 +42,15 @@ body::-webkit-scrollbar {
     display: none;
 }
 
+.error-message {
+    color: red;
+}
+
+.nav-item {
+    width: $navItemWidth;
+    display: inline-block;
+}
+
 body {
     font-family: 'Balsamiq Sans', cursive;
     background-color: black;
@@ -50,14 +66,13 @@ body {
 
     header {
         @include flex();
+        @include frost();
 
         position: sticky;
         top: 0;
         height: $navHeight;
         width: 100%;
         padding: 0 $navSpacing;
-        background-color: rgba(255, 255, 255, .05);  
-        backdrop-filter: blur(5px);
 
         #logo {
             flex-grow: 1;
@@ -69,9 +84,9 @@ body {
         }
 
         nav {
-
             button {
-                color: $textColor;
+                color: $navTextColor;
+                transition: color 0.3s;
                 border: none;
                 background: none;
                 text-transform: uppercase;
@@ -79,6 +94,41 @@ body {
                 margin-left: $navSpacing;
                 padding: 5px;
                 letter-spacing: 5px;
+            }
+
+            #drop-down-container {
+                display: inline;
+
+                #drop-down {
+                    @include frost();
+                    position: absolute;
+                    top: $navHeight;
+                    right: 0;
+                    width: 100%;
+                    text-align: center;
+                    transition: height 0.3s;
+                    list-style: none;
+                    height: 0;
+                    overflow: hidden;
+
+                    li {
+                        width: 100%;
+                        cursor: pointer;
+                        padding: 10px;
+                    }
+
+                    li:hover {
+                        background-color: rgba(125,125,125,0.8);
+                    }
+
+                    
+                }
+
+                #drop-down-icon {
+                    object-fit: cover;
+                    transition: transform 0.3s;
+                    height: 10px;
+                }
             }
 
             button:hover {
@@ -167,6 +217,7 @@ body {
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 5000px;
 
             div {
                 margin: 10px 0;
