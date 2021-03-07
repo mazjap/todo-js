@@ -53,11 +53,14 @@ function toggleDropDown(condition) {
 }
 
 function toggleItem(id, listId) {
-    let list = User.current.removeList(listId)
+    let list = User.current.removeList(listId);
 
     if (list) {
-        let task = list.removeTask(id);
-        list.push(new Task(task.title, task.dueDate, task.description, document.getElementById(id + "-checkbox").checked, id));
+        for (let i=0; i<list.tasks.length; i++) {
+            if (list.tasks[i].id == id) {
+                list.tasks[i].isCompleted = document.getElementById(id + "-checkbox").checked;
+            }
+        }
 
         User.current.addList(list);
     }
@@ -106,9 +109,12 @@ function refreshContent(state, listId) {
     }
 }
 
-function displayModal(state, id) {
-    document.getElementById("modal-content").innerHTML = HTMLGenerator.generateModal(state, id);
-    document.getElementById("modal-popover").style.display = "flex";
+function displayModal(state, id, listId) {
+    let result = HTMLGenerator.generateModal(state, id, listId);
+    if (result) {
+        document.getElementById("modal-content").innerHTML = result;
+        document.getElementById("modal-popover").style.display = "flex";
+    }
 }
 
 function abortModal() {
@@ -137,9 +143,7 @@ function createTask(id) {
     console.log("desc: " + desc);
     console.log("dueDate: " + dueDate);
 
-    console.log("Attempting to find list from id: " + id);
     let list = User.current.removeList(id);
-    console.log(list ? "Found " + list : "No list found with matching id");
     
     if (list) {
         list.tasks.push(new Task(name, dueDate, desc))
@@ -149,10 +153,45 @@ function createTask(id) {
     }
 }
 
+function saveTask(id, listId) {
+    const name = document.getElementById("new-task-name").value;
+    const desc = document.getElementById("new-task-desc").value;
+    const dueDate = document.getElementById("new-task-due-date").value;
+    console.log("Saving task:");
+    console.log("name: " + name);
+    console.log("desc: " + desc);
+    console.log("dueDate: " + dueDate);
+
+    let list = User.current.removeList(listId);
+
+    if (list) {
+        for (let i=0; i<list.tasks.length; i++) {
+            const task = list.tasks[i]
+            if (task.id == id) {
+                task.title = name
+                task.description = desc
+                task.dueDate = dueDate
+            }
+        }
+
+        User.current.addList(list);
+        abortModal();
+        refreshContent(State.listDetail, list.id);
+    }
+}
+
 function clearCompleted(id) {
     let list = User.current.removeList(id);
+
     if (list) {
-        list.clearCompletedTodos();
+        let arr = [];
+
+        for (let i=0; i<list.tasks.length; i++) {
+            if (!list.tasks[i].isCompleted) {
+                arr.push(list.tasks[i]);
+            }
+        }
+        list.tasks = arr;
         User.current.addList(list);
         refreshContent(State.listDetail, id);
     }
@@ -162,7 +201,13 @@ function deleteTask(id, listId) {
     let list = User.current.removeList(listId);
 
     if (list) {
-        list.removeTask(id);
+        for (let i=0; i<list.tasks.length; i++) {
+            const task = list.tasks[i];
+            if (task.id == id) {
+                list.tasks.splice(i, 1);
+            }
+        }
+
         User.current.addList(list);
         refreshContent(State.listDetail, listId);
     }

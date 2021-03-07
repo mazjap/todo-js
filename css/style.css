@@ -29,8 +29,12 @@ body::-webkit-scrollbar {
 .delete-button {
   color: white;
   background-color: red;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  margin: 30px;
 }
 
 .nav-item {
@@ -115,11 +119,8 @@ body header nav button:hover {
   color: lightgray;
   cursor: pointer;
 }
-body section {
-  padding-top: 20vh;
-}
-body #content #list {
-  margin: 0 10%;
+body #content {
+  margin: 20vh 10% 0 10%;
 }
 body #content #list .list-item {
   display: flex;
@@ -134,6 +135,8 @@ body #content #list .list-item .checkbox-container, body #content #list .list-it
   flex-direction: row;
 }
 body #content #list .list-item .checkbox-container button, body #content #list .list-item .checkbox-container .is-complete, body #content #list .list-item .actions-container button, body #content #list .list-item .actions-container .is-complete {
+  color: white;
+  background-color: red;
   width: 16px;
   height: 16px;
   border: none;

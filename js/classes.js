@@ -6,29 +6,7 @@ class Task {
         this.description = description;
         this.isCompleted = isCompleted;
         this.id = id;
-        this.due = dueDate
-    }
-
-    setTitle(newTitle) {
-        this.title = newTitle;
-    }
-
-    setDesc(newDesc) {
-        this.description = newDesc;
-    }
-
-    toggleCompleted() {
-        this.isCompleted = !this.isCompleted;
-    }
-
-    dateToString() {
-        let dateString = this.dueDate.getFullYear() + "/" +
-                         this.dueDate.getMonth() + "/" +
-                         this.dueDate.getDate() + " " +
-                         this.dueDate.getHours() + ":"  +
-                         this.dueDate.getMinutes(); // Output: `2021/02/23 9:49`
-
-        return dateString;
+        this.dueDate = dueDate
     }
 }
 
@@ -37,46 +15,6 @@ class List {
         this.name = name
         this.tasks = tasks;
         this.id = id;
-    }
-
-    push(task) {
-        this.tasks.push(task);
-    }
-
-    removeTask(id) {
-        let ret;
-
-        for (let i=0; i<this.tasks.length; i++) {
-            const task = this.tasks[i];
-            console.log(task.id);
-            console.log(id);
-            if (task.id == id) {
-                ret = task;
-                this.tasks.splice(i, 1);
-            }
-        }
-
-        return ret;
-    }
-
-    hasCompleted() {
-        console.log(this.tasks)
-        for (let todo of this.tasks) {
-            console.log(todo);
-            if (todo.isCompleted) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    clearCompletedTodos() {
-        for (let todo of this.tasks) {
-            if (todo.isCompleted) {
-                this.removeTask(todo.id);
-            }
-        }
     }
 }
 
@@ -129,12 +67,12 @@ class HTMLGenerator {
             <div class="checkbox-container">
                 <input type="checkbox" class="is-complete" id="${item.id}-checkbox" onchange="toggleItem('${item.id}', '${listId}')" ${item.isCompleted ? "checked" : ""}>
                 <div class="text">
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
+                    <h3 onclick="displayModal('edit-task', '${item.id}', '${listId}')">${item.title}</h3>
+                    <p onclick="displayModal('edit-task', '${item.id}', '${listId}')">${item.description}</p>
                 </div>
             </div>
             <div class="actions-container">
-                <span class="dueDate">${item.due}</span>
+                <span class="dueDate" onclick="displayModal('edit-task', '${item.id}', '${listId}')">${item.dueDate}</span>
                 <input type="checkbox" class="is-expanded">
                 <button class="delete-button" onclick="deleteTask('${item.id}', '${listId}')">-</button>
             </div>
@@ -176,12 +114,14 @@ class HTMLGenerator {
 
         let html =  user ? `<p id="new-list" onclick="displayModal(this.id)">+</p>` : '';
 
-        if ((user?.lists ?? []).length !== 0) {
+        if (!user) {
+            html += "<p class='error-message'>You must be signed in!</p>"
+        } else if ((user?.lists ?? []).length === 0) {
+            html += "<p class='error-message'>You do not have any lists</p>";
+        } else {
             for (let list of user?.lists ?? []) {
                 html += this.generateListPreview(list);
             }
-        } else {
-            html += "<p class='error-message'>You do not have any lists</p>";
         }
 
         return html
@@ -234,7 +174,7 @@ class HTMLGenerator {
         </div>`;
     }
 
-    static generateModal(state, id) {
+    static generateModal(state, id, listId) {
         switch (state) {
             case "new-list":
                 return `
@@ -247,9 +187,44 @@ class HTMLGenerator {
                 return `
                 <input id="new-task-name" type="text" placeholder="Task Name">'
                 <input id="new-task-desc" type="text" placeholder="Task Description">'
-                <input id="new-task-due-date" type="date" placeholder="Due: mm/dd/yyyy">'
+                <input id="new-task-due-date" type="date">'
                 <div id="modal-buttons">
                     <button onclick="createTask('${id}')">Create</button>
+                    <button class="destructive" onclick="abortModal()">Cancel</button>
+                </div>`;
+            case "edit-task":
+                let task;
+                console.log(listId);
+                console.log(id);
+                for (let i=0; i<User.current.lists.length; i++) {
+                    let shouldBreak = false;
+                    const list = User.current.lists[i];
+                    if (list.id == listId) {
+                        for (let j=0; j<list.tasks.length; j++) {
+                            const tempTask = list.tasks[j];
+                            if (tempTask.id == id) {
+                                task = tempTask;
+                                shouldBreak = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (shouldBreak) {
+                        break;
+                    }
+                }
+
+                if (!task) {
+                    return false;
+                }
+
+                return `
+                <input id="new-task-name" type="text" value="${task.title}" placeholder="Task Name">'
+                <input id="new-task-desc" type="text" value="${task.description}" placeholder="Task Description">'
+                <input id="new-task-due-date" type="date" value="${task.dueDate}">'
+                <div id="modal-buttons">
+                    <button onclick="saveTask('${id}', '${listId}')">Save</button>
                     <button class="destructive" onclick="abortModal()">Cancel</button>
                 </div>`;
         }

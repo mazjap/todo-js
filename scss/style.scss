@@ -16,6 +16,17 @@ $navItemWidth: 10%;
     backdrop-filter: blur(5px);
 }
 
+@mixin delete() {
+    color: white;
+    background-color: red;
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    margin: 30px;
+}
+
 $sectionSpacing: $navHeight * 2;
 
 * {
@@ -48,11 +59,7 @@ body::-webkit-scrollbar {
 }
 
 .delete-button {
-    color: white;
-    background-color: red;
-
-    width: 20px;
-    height: 20px;
+    @include delete();
 }
 
 .nav-item {
@@ -148,14 +155,10 @@ body {
         }
     }
 
-    section {
-        padding-top: $sectionSpacing;
-    }
-
     #content {
-        #list {
-            margin: 0 10%;
+        margin: $sectionSpacing 10% 0 10%;
 
+        #list {
             .list-item {
                 @include flex($justify: space-between);
 
@@ -163,12 +166,7 @@ body {
                     @include flex($justify: space-between);
 
                     button, .is-complete {
-                        width: 16px;
-                        height: 16px;
-                        border: none;
-                        border-radius: 2px;
-                        cursor: pointer;
-                        margin: 30px;
+                        @include delete();
                     }
 
                     .is-expanded {
