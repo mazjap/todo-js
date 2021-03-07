@@ -1,4 +1,4 @@
-$navHeight: 60px;
+$navHeight: 10vh;
 $navSpacing: 40px;
 $navTextColor: black;
 $textColor: white;
@@ -45,6 +45,14 @@ body::-webkit-scrollbar {
 .error-message, .destructive {
     color: red;
     text-align: center;
+}
+
+.delete-button {
+    color: white;
+    background-color: red;
+
+    width: 20px;
+    height: 20px;
 }
 
 .nav-item {
@@ -163,18 +171,9 @@ body {
                         margin: 30px;
                     }
 
-                    button {
-                        color: white;
-                        background-color: red;
-                    }
-
                     .is-expanded {
                         display: none;
                     }
-                }
-
-                h3 {
-
                 }
 
                 p {
@@ -187,8 +186,8 @@ body {
             background-color: rgba(125,125,125,0.5);
         }
 
-        #list-preview {
-            @include flex(flex-end, center, row);
+        .list-preview {
+            @include flex(flex-end, center);
             padding: 10px;
 
             .text {
@@ -202,7 +201,7 @@ body {
             }
         }
 
-        #new-list {
+        #new-list, #new-task {
             margin: 20px;
         }
 
